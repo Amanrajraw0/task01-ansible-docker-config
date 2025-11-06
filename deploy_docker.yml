@@ -1,0 +1,52 @@
+---
+- name: Install Docker, pull image, and run container
+  hosts: appservers
+  become: true
+  tasks:
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker engine
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image
+      docker_image:
+        name: amanrajraw0/mywebsite
+        tag: latest
+        source: pull
+
+    - name: Run Docker container
+      docker_container:
+        name: mywebsite
+        image: amanrajraw0/mywebsite:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "80:80"
