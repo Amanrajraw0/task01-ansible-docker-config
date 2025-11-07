@@ -28,44 +28,39 @@ The goal of this task is to automate the deployment process using an **Ansible P
 - Connected to the instance using:
   ```bash
   ssh -i "your-key.pem" ubuntu@<your-ec2-public-ip>
-⚙️ 2. Install Ansible
-Updated system packages and installed Ansible using the following commands:
 
-bash
-Copy code
+## ⚙️ Step 2: Install Ansible
+
+Updated and installed **Ansible** on the EC2 instance:
+
+```bash
 sudo apt update
 sudo apt install ansible -y
-Verified installation:
+```
+### 🖥️ Output Example:
 
-bash
-Copy code
-ansible --version
-Output example:
+✅ **Ansible installed successfully.**
+```bash
+  ansible [core 2.x]\
+  python version = 3.x
+```
+✅ **Ansible installed successfully.**
 
-java
-Copy code
-ansible [core 2.x]
-python version = 3.x
-🟢 Ansible is now installed successfully and ready for automation tasks.
+## 📜 Step 3: Configure Inventory File
 
-📜 3. Configure Inventory File
-Created an inventory file using the cat command to define target hosts:
+Created an inventory file that defines the host (local EC2 instance):
 
-bash
-Copy code
+```bash
 cat > inventory.ini << 'EOF'
 [appservers]
 localhost ansible_connection=local
 EOF
-This tells Ansible to run the playbook locally on the EC2 instance (since we’re testing on the same machine).
+```
+🟢 The inventory is ready — Ansible will run the playbook locally on this EC2.
 
-🟢 Inventory file configured successfully.
-
-⚙️ 4. Create Ansible Playbook
-Created the main playbook named deploy_docker.yml using the following command:
-
-bash
-Copy code
+## 🧾 Step 4: Create Ansible Playbook
+Created a YAML playbook to automate Docker installation and container setup:
+```bash
 cat > deploy_docker.yml << 'EOF'
 ---
 - name: Install Docker, pull custom image, and run container
@@ -116,87 +111,94 @@ cat > deploy_docker.yml << 'EOF'
     - name: Run Docker container
       command: docker run -d -p {{ bind_ports[0] }} --name {{ container_name }} {{ docker_image }}
 EOF
-🟢 Playbook successfully created.
-It automates:
-
-Installing Docker
-
-Pulling your image from Docker Hub
-
-Running the container automatically on port 80
-
-▶️ 5. Execute the Playbook
-Run the playbook to apply the automation:
-
-bash
-Copy code
+```
+## ▶️ Step 5: Execute the Playbook
+Run your playbook:
+```bash
 ansible-playbook -i inventory.ini deploy_docker.yml
+```
 Check if the container is running:
-
-bash
-Copy code
+```bash
 docker ps
-✅ Expected Output:
-
-bash
-Copy code
+```
+### ✅ Expected Output:
+```bash
 CONTAINER ID   IMAGE                           COMMAND   STATUS   PORTS
 abcd1234efgh   amanrajraw0/mywebsite:latest    ...       Up      0.0.0.0:80->80/tcp
-Your web app is now live on your EC2’s public IP at port 80.
+```
+#### 🌐web app is now live at:
+```bash
+http://http://13.48.196.154/
+```
+## 🧠 What I Learned
+- Automating server configuration using Ansible
 
-🧠 What I Learned
-How to automate server configuration using Ansible
+- Writing and executing YAML-based playbooks
 
-Writing and executing YAML playbooks
+- Installing and managing Docker containers via - automation
 
-Installing and managing Docker containers with Ansible
+- Deploying workloads on AWS EC2
 
-Deploying and testing on AWS EC2
+- Using GitHub PAT tokens for secure repository access
 
-Using GitHub PAT tokens for secure repository access
 
-📂 Files in This Repository
-File Name	Description
-inventory.ini	Defines Ansible target host (EC2 instance)
-deploy_docker.yml	Main automation playbook
-README.md	Project documentation and report
 
-🌍 How to Run This Project
+## 📂 Repository Structure
+
+The following files make up the **Ansible Docker Automation Project**:
+
+| File Name | Description |
+|------------|--------------|
+| 🧩 **inventory.ini** | Defines the target host(s) where Ansible will deploy and manage configurations. |
+| 📜 **deploy_docker.yml** | Main Ansible Playbook that automates Docker installation, image pulling, and container setup. |
+| 📘 **README.md** | Project documentation and detailed report explaining setup, commands, and outputs. |
+
+---
+
+### 📁 Directory Overview
+```bash
+ansible-docker-task/
+├── inventory.ini
+├── deploy_docker.yml
+└── README.md
+```
+
+## 🌍 How to Run This Project
 Clone this repository:
-
-bash
-Copy code
+```bash
 git clone https://github.com/Amanrajraw0/task01-ansible-docker-config.git
 cd task01-ansible-docker-config
-Run the playbook:
-
-bash
-Copy code
+```
+Run the Ansible playbook:
+```bash
 ansible-playbook -i inventory.ini deploy_docker.yml
+```
 Verify Docker container:
-
-bash
-Copy code
+```bash
 docker ps
-🧾 Summary
-This project demonstrates how Ansible can simplify complex setup processes using Infrastructure as Code (IaC).
-By automating Docker installation and deployment, we ensure fast, repeatable, and error-free setups — perfect for real-world DevOps workflows.
+```
 
-🏁 Conclusion
-Through this task, I successfully:
+### 🧾 Summary
+This project showcases **Infrastructure as Code (IaC)** using Ansible.
+It simplifies repetitive setup processes, ensures consistent deployments, and demonstrates how automation can streamline DevOps pipelines.
 
-Automated Docker installation using Ansible
+By automating Docker installation and container deployment, this project proves the power of **Ansible + Docker + AWS** EC2 integration.
 
-Pulled and deployed a Docker image automatically on AWS EC2
+### 🏁 Conclusion
+✅ Automated Docker installation using Ansible\
+✅ Pulled and deployed custom Docker image on AWS EC2\
+✅ Gained experience in configuration management and continuous deployment
 
-Understood the workflow of configuration management and continuous deployment
-
-This task highlights the real-world importance of automation in DevOps.
-
-👨‍💻 Author
-Aman Raj Raw
-🎓 B.Tech CSE | 💻 DevOps & Cloud Enthusiast
-
-📍 AWS | Ansible | Docker | CI/CD | Automation
-📧 Email: amanrajraw@example.com
+#### 👨‍💻 Author
+Aman Raj Raw\
+🎓 B.Tech CSE | 💻 DevOps & Cloud Enthusiast\
+📍 AWS | Ansible | Docker | CI/CD | Automation\
+📧 Email: raj362256@gmail.com\
 🌐 GitHub: Amanrajraw0
+
+
+
+
+
+
+
